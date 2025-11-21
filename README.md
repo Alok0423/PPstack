@@ -1,12 +1,40 @@
-# React + Vite
+# 🚀 PPStack - EdTech Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> A high-performance, scalable EdTech frontend architecture inspired by the visual identity of DeepLearning.AI, Coursera, and Notion.
 
-Currently, two official plugins are available:
+![Project Status](https://img.shields.io/badge/Status-Development-blue?style=for-the-badge)
+![Tech Stack](https://img.shields.io/badge/Stack-React_|_Vite_|_Tailwind-pink?style=for-the-badge)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🎨 Design Philosophy
+**PPStack** is built with a specific visual language:
+- **Primary Aesthetic:** Futuristic, clean, "Deep Tech" (Deep Blue & Neon Accents).
+- **UI/UX:** Glassmorphism cards, Framer Motion animations, and Notion-style minimal inputs.
+- **Architecture:** Modular component-based structure.
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
+- **Core:** React 18 + Vite
+- **Styling:** Tailwind CSS
+- **Animation:** Framer Motion
+- **Routing:** React Router DOM
+- **Icons:** Lucide React
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## ⚡ Quick Start Guide
+
+### 1. Prerequisites
+Ensure you have **Node.js (LTS version)** installed.
+Recommended: Node v20.x or higher.
+
+### 2. Installation
+Clone the repository and install dependencies:
+
+```bash
+# Clone the repo
+git clone [https://github.com/YOUR_USERNAME/ppstack.git](https://github.com/YOUR_USERNAME/ppstack.git)
+
+# Enter directory
+cd ppstack
+
+# Install dependencies
+npm install
