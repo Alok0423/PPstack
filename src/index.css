@@ -1,25 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Glassmorphism & Global Styles */
 body {
-  background-color: #F8FAFC;
-  color: #2C3E50;
+  background-color: #000000; /* Force black background to prevent white flashes */
+  color: #ffffff;
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
 }
 
-.glass-card {
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+/* Custom Scrollbar for elegance */
+::-webkit-scrollbar {
+  width: 8px;
 }
-
-.glass-nav {
-  background: rgba(10, 27, 100, 0.95); /* Dark blue glass */
-  backdrop-filter: blur(10px);
+::-webkit-scrollbar-track {
+  background: #111;
+}
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

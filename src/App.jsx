@@ -1,23 +1,63 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Courses from './pages/Courses'; // <-- Import this
-import DashboardLayout from './layouts/DashboardLayout';
+import React from 'react';
+import Navbar from './components/layout/Navbar';
+import Hero from './components/home/Hero';
+import Stats from './components/home/Stats';
+import CompanyMarquee from './components/home/CompanyMarquee';
+import IndustryLearning from './components/home/IndustryLearning';
+import CareerRoadmap from './components/home/CareerRoadmap';
+import Faculty from './components/home/Faculty';
+import Offerings from './components/courses/Offerings';
+import { MessageCircle } from 'lucide-react';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/courses" element={<Courses />} />  {/* <-- Add this route */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Login />} />
+    <div className="min-h-screen bg-black font-sans">
+      <Navbar />
+      
+      <main>
+        {/* Dark Mode Hero Area */}
+        <Hero />
         
-        <Route path="/dashboard" element={<DashboardLayout />}>
-            <Route index element={<div className="p-4">Dashboard Home</div>} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+        {/* Transition to Light Mode Content */}
+        <div className="bg-white rounded-t-[40px] relative z-20 mt-[-40px] pt-10 overflow-hidden">
+            <Stats />
+            <CompanyMarquee />
+            <IndustryLearning />
+            <CareerRoadmap />
+            <Faculty />
+            <Offerings />
+            
+            {/* Alumni Section Placeholder (As per request) */}
+            <section className="py-20 bg-purple-50">
+                <div className="max-w-7xl mx-auto px-6">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-8">Newton Alumni Network</h2>
+                    <div className="h-64 bg-white rounded-2xl border border-gray-200 flex items-center justify-center text-gray-400">
+                        Alumni Success Stories Carousel Component
+                    </div>
+                </div>
+            </section>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-blue-600 py-6">
+          <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-white">
+              <div className="flex gap-4 mb-4 md:mb-0">
+                  <span className="font-bold">Need Help?</span>
+                  <button className="bg-white text-blue-600 px-4 py-1 rounded font-bold text-sm">Request Callback</button>
+              </div>
+              <p className="text-sm opacity-80">&copy; 2025 Newton School</p>
+          </div>
+      </footer>
+
+      {/* Floating Widget */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <button className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg shadow-lg flex items-center gap-2 font-bold text-sm transition-transform hover:scale-105">
+           <MessageCircle size={20} />
+           <span>Questions?</span>
+        </button>
+      </div>
+    </div>
   );
 }
 
