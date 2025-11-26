@@ -1,11 +1,13 @@
+// src/components/home/Hero.jsx
 import React from 'react';
 import { Star, CheckCircle } from 'lucide-react';
+import { Link } from 'react-router-dom'; // <--- Ensure this is imported for the button
 
 const Hero = () => {
   return (
     <section className="relative pt-32 pb-20 bg-black overflow-hidden min-h-[90vh] flex items-center">
       
-      {/* 1. Background Ambient Glows (Subtle) */}
+      {/* Background Ambient Glows */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-[120px]" />
         <div className="absolute bottom-[10%] right-[-5%] w-[400px] h-[400px] bg-purple-600/10 rounded-full blur-[100px]" />
@@ -37,9 +39,13 @@ const Hero = () => {
               <button className="px-8 py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-100 transition-transform hover:scale-105 shadow-xl shadow-white/10">
                 Talk to an Expert
               </button>
-              <button className="px-8 py-4 bg-transparent border border-gray-700 text-white font-bold rounded-xl hover:bg-white/5 transition-colors">
-                Explore Courses
-              </button>
+              
+              {/* Linked to Courses Page */}
+              <Link to="/courses">
+                <button className="px-8 py-4 bg-transparent border border-gray-700 text-white font-bold rounded-xl hover:bg-white/5 transition-colors">
+                  Explore Courses
+                </button>
+              </Link>
             </div>
 
             {/* Social Proof */}
@@ -63,7 +69,6 @@ const Hero = () => {
 
           {/* RIGHT COLUMN: The Form */}
           <div className="relative">
-            {/* Form Glow */}
             <div className="absolute inset-0 bg-blue-500/20 blur-2xl rounded-3xl -z-10 transform rotate-2"></div>
             
             <div className="bg-white p-6 md:p-8 rounded-2xl shadow-2xl">
@@ -106,10 +111,6 @@ const Hero = () => {
                 <button className="w-full py-4 mt-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2">
                   Start My Journey <CheckCircle size={18} />
                 </button>
-                
-                <p className="text-[10px] text-center text-gray-400 leading-tight pt-2">
-                  By clicking above, you agree to our Terms & Conditions and Privacy Policy.
-                </p>
               </form>
             </div>
           </div>
@@ -120,4 +121,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default Hero; 
