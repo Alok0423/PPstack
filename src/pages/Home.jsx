@@ -1,6 +1,5 @@
 // src/pages/Home.jsx
 import React from 'react';
-import { MessageCircle } from 'lucide-react';
 
 // --- COMPONENT IMPORTS ---
 import Navbar from '../components/layout/Navbar';
@@ -13,7 +12,8 @@ import CareerRoadmap from '../components/home/CareerRoadmap';
 import Faculty from '../components/home/Faculty';
 import Offerings from '../components/courses/Offerings';
 import FAQ from '../components/home/FAQ';
-import AlumniCarousel from '../components/home/AlumniCarousel'; // <--- NEW IMPORT
+import AlumniCarousel from '../components/home/AlumniCarousel';
+import ChatWidget from '../components/ui/ChatWidget'; // <--- 1. IMPORT THE WIDGET
 
 const Home = () => {
   return (
@@ -21,10 +21,8 @@ const Home = () => {
       <Navbar />
       
       <main>
-        {/* Dark Mode Hero Area */}
         <Hero />
         
-        {/* Transition to Light Mode Content */}
         <div className="bg-white rounded-t-[40px] relative z-20 mt-[-40px] pt-10 overflow-hidden">
             <Stats />
             <CompanyMarquee />
@@ -33,18 +31,12 @@ const Home = () => {
             <Faculty />
             <Offerings />
             <FAQ />
-            
-            {/* --- ALUMNI CAROUSEL SECTION --- */}
-            {/* Replaced the old placeholder with the actual component */}
             <AlumniCarousel />
-            
         </div>
       </main>
 
-      {/* Main Footer */}
       <Footer />
 
-      {/* Blue Bottom Bar */}
       <div className="bg-blue-600 py-4 border-t border-blue-500">
           <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center text-white">
               <div className="flex gap-4 mb-2 md:mb-0">
@@ -55,13 +47,9 @@ const Home = () => {
           </div>
       </div>
 
-      {/* Floating Widget */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <button className="bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg shadow-lg flex items-center gap-2 font-bold text-sm transition-transform hover:scale-105">
-           <MessageCircle size={20} />
-           <span>Questions?</span>
-        </button>
-      </div>
+      {/* 2. REPLACE THE OLD BUTTON WITH THIS COMPONENT */}
+      <ChatWidget />
+      
     </div>
   );
 };
