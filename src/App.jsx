@@ -1,21 +1,29 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-// Import Pages
 import Home from './pages/Home';
 import Courses from './pages/Courses';
-import CourseDetail from './pages/CourseDetail'; // <--- Import the new page
+import CourseDetail from './pages/CourseDetail';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import Contact from './pages/Contact';
+import WhatsAppButton from './components/ui/WhatsAppButton';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/courses" element={<Courses />} />
+    <>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/courses" element={<Courses />} />
+        <Route path="/course/:id" element={<CourseDetail />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/contact" element={<Contact />} />
+      </Routes>
       
-      {/* THE DYNAMIC ROUTE */}
-      {/* :id is a variable placeholder */}
-      <Route path="/course/:id" element={<CourseDetail />} />
-    </Routes>
+      {/* Global Floating Elements */}
+      <WhatsAppButton />
+    </>
   );
 }
 

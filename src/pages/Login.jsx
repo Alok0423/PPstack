@@ -1,41 +1,58 @@
-import { motion } from 'framer-motion';
-import Button from '../components/ui/Button';
-import { Link } from 'react-router-dom';
-
-const Input = ({ type, placeholder }) => (
-  <div className="mb-4 group">
-    <input 
-      type={type} 
-      placeholder={placeholder}
-      className="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-3 outline-none focus:border-brand-blue focus:ring-2 focus:ring-blue-500/10 transition-all"
-    />
-  </div>
-);
+import React from 'react';
+import { GoogleLogin } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    try {
+      // 1. Get the token from Google
+      const { credential } = credentialResponse;
+
+      // 2. Send it to YOUR Backend
+      const res = await fetch('http://localhost:5000/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: credential }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        // 3. Login Success
+        console.log('Login Success:', data);
+        localStorage.setItem('user', JSON.stringify(data)); // Save user
+        navigate('/dashboard'); // Go to dashboard
+      } else {
+        console.error('Login Failed:', data.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <motion.div 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md border border-gray-100"
-      >
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-brand-dark">Welcome Back</h2>
-          <p className="text-gray-500 mt-2">Enter your details to access your dashboard.</p>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+      <div className="bg-white p-8 rounded-xl shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Login to PPStack</h2>
+        
+        {/* The Google Button */}
+        <div className="flex justify-center">
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => {
+              console.log('Login Failed');
+            }}
+          />
         </div>
-
-        <form>
-          <Input type="email" placeholder="Email Address" />
-          <Input type="password" placeholder="Password" />
-          <Button className="w-full mt-4 justify-center flex">Sign In</Button>
-        </form>
-
-        <div className="mt-6 text-center text-sm text-gray-500">
-          Don't have an account? <Link to="/signup" className="text-brand-blue font-semibold">Sign up</Link>
-        </div>
-      </motion.div>
+        
+        <p className="mt-4 text-center text-sm text-gray-500">
+            Or login with email/password below...
+        </p>
+      </div>
     </div>
   );
 };
+
 export default Login;
