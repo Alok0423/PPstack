@@ -1,7 +1,6 @@
-// This service connects to your Node.js Backend (Port 5000)
-// It replaces the old Firebase Auth logic
-
-const API_URL = "http://localhost:5000/api/auth";
+// This service connects to your Node.js Backend.
+// Use `VITE_API_URL` in the frontend env to point to your backend.
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api/auth";
 
 // 1. Register a new user (Email/Password)
 export const registerUser = async (userData) => {

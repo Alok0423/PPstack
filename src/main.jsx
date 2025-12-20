@@ -7,10 +7,9 @@ import { BrowserRouter } from 'react-router-dom';
 // Import the AuthProvider we created earlier
 import { AuthProvider } from './context/AuthContext';
 
-// FIX: We added quotes "" around the ID.
-// Note: A real Google Client ID usually ends with ".apps.googleusercontent.com"
-// Make sure you copied the WHOLE string from Google Cloud.
-const clientId = "895363479468-p9o51d8kuv33hajtl642uom3cvq63tvl.apps.googleusercontent.com";
+// Use environment variable `VITE_GOOGLE_CLIENT_ID` (set in .env.local)
+// Fallback to the string in case env isn't provided (use only for quick local testing).
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "895363479468-p9o51d8kuv33hajtl642uom3cvq63tvl.apps.googleusercontent.com";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

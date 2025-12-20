@@ -1,38 +1,52 @@
 import React from 'react'
+import { useAuth } from '../context/AuthContext'
+import StatsCard from '../components/ui/StatsCard'
+import WelcomeCard from '../components/ui/WelcomeCard'
+import RecentCourses from '../components/home/RecentCourses'
 import { COURSES } from '../data/dummy'
-import ProgressBar from '../components/ui/ProgressBar'
 
 export default function Dashboard(){
+  const { user } = useAuth();
+
+  // sample stats (replace with real data when available)
+  const stats = [
+    { title: 'Courses enrolled', value: 8 },
+    { title: 'Hours learned', value: '120h' },
+    { title: 'Progress', value: '54%' },
+    { title: 'Certificates', value: 2 }
+  ];
+
   return (
-    <div>
-      <h1 className="text-2xl font-semibold">Dashboard</h1>
-      <p className="text-sm text-slate-600">Your enrolled courses & progress</p>
+    <div className="space-y-6">
+      <WelcomeCard />
 
-      <div className="mt-6 grid md:grid-cols-2 gap-4">
-        {COURSES.slice(0,4).map(c=> (
-          <div className="p-4 bg-white rounded-xl border" key={c.id}>
-            <div className="flex items-center gap-3">
-              <img src={c.cover} className="w-12 h-12 rounded-md" alt='' />
-              <div>
-                <div className="font-semibold">{c.title}</div>
-                <div className="text-xs text-slate-500">{c.author}</div>
-              </div>
-            </div>
-
-            <div className="mt-4">
-              <ProgressBar value={Math.floor(Math.random()*80)} />
-            </div>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {stats.map((s, idx) => (
+          <StatsCard key={idx} title={s.title} value={s.value} />
         ))}
       </div>
 
-      <section className="mt-8">
-        <h2 className="font-semibold">Certificates</h2>
-        <div className="mt-4 grid md:grid-cols-3 gap-4">
-          <div className="card-glass p-4 rounded-xl">Certificate: Foundations of Deep Learning</div>
-          <div className="card-glass p-4 rounded-xl">Certificate: Applied ML</div>
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="md:col-span-2 space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-semibold">Your Courses</h2>
+            <div className="text-sm text-slate-500">Showing recent</div>
+          </div>
+          <RecentCourses />
         </div>
-      </section>
+
+        <aside className="space-y-4">
+          <div className="card-glass p-4 rounded-xl">
+            <h3 className="font-semibold">Upcoming</h3>
+            <p className="text-sm text-slate-500 mt-2">No upcoming sessions</p>
+          </div>
+
+          <div className="card-glass p-4 rounded-xl">
+            <h3 className="font-semibold">Certificates</h3>
+            <div className="mt-2 text-sm text-slate-600">You have 2 certificates</div>
+          </div>
+        </aside>
+      </div>
     </div>
   )
 }
