@@ -7,6 +7,8 @@ import CourseDetail from './pages/CourseDetail';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Contact from './pages/Contact';
+import Dashboard from './pages/Dashboard';
+import ProtectedRoute from './components/layout/ProtectedRoute';
 import WhatsAppButton from './components/ui/WhatsAppButton';
 
 function App() {
@@ -19,6 +21,14 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/contact" element={<Contact />} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
       
       {/* Global Floating Elements */}

@@ -28,7 +28,12 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(helmet());
+// Configure helmet so Google Identity popups/postMessage are not blocked by strict COOP
+app.use(
+  helmet({
+    crossOriginOpenerPolicy: { policy: 'same-origin-allow-popups' },
+  })
+);
 app.use(morgan(process.env.NODE_ENV === 'production' ? 'combined' : 'dev'));
 
 const CLIENT_URL = process.env.CLIENT_URL || '*';
