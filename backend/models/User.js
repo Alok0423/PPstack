@@ -7,6 +7,8 @@ const userSchema = new mongoose.Schema(
     email: { type: String, required: [true, 'Please add an email'], unique: true, lowercase: true, trim: true },
     password: { type: String },
     googleId: { type: String, index: true, sparse: true },
+    provider: { type: String, enum: ['local', 'google'], default: 'local' },
+    role: { type: String, enum: ['learner', 'tutor'], default: 'learner' },
     picture: { type: String },
     isAdmin: { type: Boolean, default: false },
   },

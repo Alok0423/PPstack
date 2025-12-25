@@ -54,14 +54,14 @@ export const loginWithEmail = async (email, password) => {
 };
 
 // 3. Login with Google
-export const loginWithGoogle = async (token) => {
+export const loginWithGoogle = async (token, role) => {
   try {
     const response = await fetch(`${API_URL}/google`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ token }),
+      body: JSON.stringify({ token, role }),
     });
 
     const data = await response.json();

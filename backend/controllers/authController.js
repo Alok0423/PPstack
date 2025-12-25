@@ -14,13 +14,13 @@ const generateToken = (id) => {
 // Register (email/password)
 exports.registerUser = async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
     if (!name || !email || !password) return res.status(400).json({ message: 'Please provide name, email and password' });
 
     const existing = await User.findOne({ email });
     if (existing) return res.status(400).json({ message: 'User already exists' });
 
-    const user = await User.create({ name, email, password });
+    const user = await User.create({ name, email, password, provider: 'local', role: role || 'learner' });
 
     // Send welcome email asynchronously (do not block response)
     emailService.sendWelcomeEmail(user.email, user.name).catch((err) => console.error('Welcome email failed', err));
@@ -44,6 +44,10 @@ exports.loginUser = async (req, res, next) => {
     if (!email || !password) return res.status(400).json({ message: 'Please provide email and password' });
 
     const user = await User.findOne({ email });
+    if (user && user.provider === 'google' && !user.password) {
+      return res.status(400).json({ message: 'This account uses Google sign-in. Please use Google login.' });
+    }
+
     if (user && (await user.matchPassword(password))) {
       // send welcome email on every successful login (as requested)
       emailService.sendWelcomeEmail(user.email, user.name).catch((err) => console.error('Welcome email failed', err));
@@ -72,13 +76,17 @@ exports.googleLogin = async (req, res, next) => {
     const payload = ticket.getPayload();
     const { sub: googleId, email, name, picture } = payload;
 
+    const roleFromClient = req.body.role;
     let user = await User.findOne({ email });
     if (!user) {
-      user = await User.create({ name, email, googleId, picture });
+      user = await User.create({ name, email, googleId, picture, provider: 'google', role: roleFromClient || 'learner' });
     } else if (!user.googleId) {
       // Link accounts if email exists but googleId missing
       user.googleId = googleId;
       user.picture = user.picture || picture;
+      // do not overwrite an existing explicit role
+      if (!user.role && roleFromClient) user.role = roleFromClient;
+      user.provider = user.provider || 'google';
       await user.save();
     }
 
