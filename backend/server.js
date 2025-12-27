@@ -52,7 +52,7 @@ app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 // ======================
 app.use(
   cors({
-    origin: "https://ppstack.vercel.app", // frontend URL
+    origin: process.env.CLIENT_URL || "https://ppstack.vercel.app", // frontend URL (use CLIENT_URL env in production)
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
