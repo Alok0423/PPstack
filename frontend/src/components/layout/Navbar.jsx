@@ -4,6 +4,7 @@ import {
   Home, Search, Bell, TrendingUp, Clock, Star, Users, Play, MessageSquare, CheckCircle 
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/clerk-react';
 
 // --- Animation Settings ---
 const transition = {
@@ -195,10 +196,22 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
           
-          {/* Profile Avatar */}
-          <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow-md cursor-pointer hover:shadow-indigo-200 transition-all hover:scale-105">
-            AL
-          </div>
+          {/* Auth UI (Clerk) */}
+          <SignedOut>
+            <div className="flex items-center gap-3">
+              <SignInButton mode="modal">
+                <button className="text-sm text-gray-700 hover:text-indigo-600">Log in</button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <button className="px-3 py-1 bg-indigo-600 text-white rounded-full text-sm hover:bg-indigo-700">Sign up</button>
+              </SignUpButton>
+            </div>
+          </SignedOut>
+          <SignedIn>
+            <div className="flex items-center gap-3">
+              <UserButton afterSignOutUrl="/" />
+            </div>
+          </SignedIn>
         </div>
 
       </div>
