@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { getMe as apiGetMe } from "../services/authService";
 
 const AuthContext = createContext();
 
@@ -9,21 +10,48 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check if user is logged in (stored in localStorage)
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (error) {
-        console.error("Failed to parse user data", error);
-        localStorage.removeItem("user");
+    // Verify token with backend — do NOT trust localStorage alone
+    let mounted = true;
+    const verify = async () => {
+      const stored = localStorage.getItem("user");
+      if (!stored) {
+        if (mounted) setLoading(false);
+        return;
       }
-    }
-    setLoading(false);
+
+      try {
+        const parsed = JSON.parse(stored);
+        const token = parsed?.token;
+        if (!token) {
+          localStorage.removeItem("user");
+          if (mounted) setUser(null);
+          if (mounted) setLoading(false);
+          return;
+        }
+
+        // Call backend to verify token
+        const me = await apiGetMe(token);
+        // Keep token with returned user so downstream requests can use it
+        const userWithToken = { ...me, token };
+        localStorage.setItem("user", JSON.stringify(userWithToken));
+        if (mounted) setUser(userWithToken);
+      } catch (err) {
+        // Token invalid/expired — clear and treat as logged out
+        console.warn('Auth verify failed:', err.message || err);
+        localStorage.removeItem("user");
+        if (mounted) setUser(null);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    verify();
+    return () => (mounted = false);
   }, []);
 
   // Function to save user data after login
   const login = (userData) => {
+    // userData is expected to include `token` from backend
     localStorage.setItem("user", JSON.stringify(userData));
     setUser(userData);
   };

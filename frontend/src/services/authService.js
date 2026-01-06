@@ -53,3 +53,23 @@ export const loginWithGoogle = async (token, role) => {
 export const logoutUser = () => {
   localStorage.removeItem("user");
 };
+
+// 5. Verify current token by calling backend
+export const getMe = async (token) => {
+  if (!token) throw new Error('No token');
+  const response = await fetch(`${API_URL}/me`, {
+    method: 'GET',
+    headers: { Authorization: `Bearer ${token}` },
+    credentials: 'include',
+  });
+
+  if (response.status === 401 || response.status === 403) {
+    const err = new Error('Unauthorized');
+    err.status = response.status;
+    throw err;
+  }
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.message || 'Failed to verify token');
+  return data;
+};

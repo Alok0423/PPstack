@@ -96,7 +96,7 @@ const Signup = () => {
             <GoogleLogin 
               onSuccess={handleGoogleSuccess} 
               onError={() => setError("Google Signup Failed")}
-              useOneTap
+              useOneTap={false}
             />
             {loadingGoogle && (
               <div className="absolute inset-0 flex items-center justify-center bg-white/60 rounded-xl">

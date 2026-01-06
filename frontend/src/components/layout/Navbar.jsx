@@ -4,7 +4,7 @@ import {
   Home, Search, Bell, TrendingUp, Clock, Star, Users, Play, MessageSquare, CheckCircle 
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from '@clerk/clerk-react';
+import { useAuth } from '../../context/AuthContext';
 
 // --- Animation Settings ---
 const transition = {
@@ -196,25 +196,33 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
           
-          {/* Auth UI (Clerk) */}
-          <SignedOut>
-            <div className="flex items-center gap-3">
-              <SignInButton mode="modal">
-                <button className="text-sm text-gray-700 hover:text-indigo-600">Log in</button>
-              </SignInButton>
-              <SignUpButton mode="modal">
-                <button className="px-3 py-1 bg-indigo-600 text-white rounded-full text-sm hover:bg-indigo-700">Sign up</button>
-              </SignUpButton>
-            </div>
-          </SignedOut>
-          <SignedIn>
-            <div className="flex items-center gap-3">
-              <UserButton afterSignOutUrl="/" />
-            </div>
-          </SignedIn>
+          {/* Auth UI (Verified via backend) */}
+          <AuthControls />
         </div>
 
       </div>
+    </div>
+  );
+}
+
+function AuthControls() {
+  const { user, logout } = useAuth();
+
+  if (!user) {
+    return (
+      <div className="flex items-center gap-3">
+        <Link to="/login" className="text-sm text-gray-700 hover:text-indigo-600">Log in</Link>
+        <Link to="/signup" className="px-3 py-1 bg-indigo-600 text-white rounded-full text-sm hover:bg-indigo-700">Sign up</Link>
+      </div>
+    );
+  }
+
+  const initials = user.name ? user.name.split(' ').map(n => n[0]).slice(0,2).join('').toUpperCase() : (user.email ? user.email[0].toUpperCase() : 'U');
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="h-8 w-8 rounded-full bg-indigo-600 text-white flex items-center justify-center font-semibold">{initials}</div>
+      <button onClick={logout} className="text-sm text-gray-600 hover:text-red-600">Logout</button>
     </div>
   );
 }
