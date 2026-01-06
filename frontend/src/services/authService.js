@@ -1,7 +1,9 @@
 // src/services/authService.js
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const API_URL = `${BASE_URL}/api/auth`;
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+// If VITE_API_BASE_URL is not set (e.g. simple frontend-only deploy),
+// use relative API paths so requests go to the same origin.
+const API_URL = BASE_URL ? `${BASE_URL}/api/auth` : `/api/auth`;
 
 // 1. Register
 export const registerUser = async (userData) => {
