@@ -4,6 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
+const cookieParser = require('cookie-parser');
 
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
@@ -37,6 +38,8 @@ const app = express();
 // Core Middleware (ORDER MATTERS)
 // ======================
 app.use(express.json());
+// Parse cookies so auth middleware can read token from httpOnly cookie
+app.use(cookieParser());
 
 // Helmet config (needed for Google popup)
 app.use(

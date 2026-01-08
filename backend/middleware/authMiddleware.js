@@ -3,9 +3,12 @@ const User = require('../models/User');
 
 exports.protect = async (req, res, next) => {
   let token;
-  const authHeader = req.headers.authorization || req.cookies?.token;
+  const authHeader = req.headers.authorization;
+  // Prefer Authorization header, fallback to cookie (httpOnly cookie set on login)
   if (authHeader && authHeader.startsWith('Bearer ')) {
     token = authHeader.split(' ')[1];
+  } else if (req.cookies && req.cookies.token) {
+    token = req.cookies.token;
   }
 
   if (!token) {

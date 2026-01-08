@@ -2,14 +2,16 @@ const User = require('../models/User');
 const { OAuth2Client } = require('google-auth-library');
 const jwt = require('jsonwebtoken');
 const emailService = require('../services/emailService');
+const generateToken = require('../utils/generateToken');
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRES_IN || '30d',
-  });
-};
+const cookieOptions = () => ({
+  httpOnly: true,
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  maxAge: parseInt(process.env.COOKIE_MAX_AGE, 10) || 30 * 24 * 60 * 60 * 1000, // 30 days
+});
 
 // Register (email/password)
 exports.registerUser = async (req, res, next) => {
@@ -25,12 +27,15 @@ exports.registerUser = async (req, res, next) => {
     // Send welcome email asynchronously (do not block response)
     emailService.sendWelcomeEmail(user.email, user.name).catch((err) => console.error('Welcome email failed', err));
 
+    const token = generateToken(user._id);
+    // Set httpOnly cookie and also return token in JSON for clients that prefer it
+    res.cookie('token', token, cookieOptions());
     res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       picture: user.picture,
-      token: generateToken(user._id),
+      token,
     });
   } catch (err) {
     next(err);
@@ -52,12 +57,14 @@ exports.loginUser = async (req, res, next) => {
       // send welcome email on every successful login (as requested)
       emailService.sendWelcomeEmail(user.email, user.name).catch((err) => console.error('Welcome email failed', err));
 
+      const token = generateToken(user._id);
+      res.cookie('token', token, cookieOptions());
       return res.json({
         _id: user._id,
         name: user.name,
         email: user.email,
         picture: user.picture,
-        token: generateToken(user._id),
+        token,
       });
     }
     res.status(401).json({ message: 'Invalid credentials' });
@@ -93,12 +100,14 @@ exports.googleLogin = async (req, res, next) => {
     // send welcome email on every successful login
     emailService.sendWelcomeEmail(user.email, user.name).catch((err) => console.error('Welcome email failed', err));
 
+    const token = generateToken(user._id);
+    res.cookie('token', token, cookieOptions());
     res.json({
       _id: user._id,
       name: user.name,
       email: user.email,
       picture: user.picture,
-      token: generateToken(user._id),
+      token,
     });
   } catch (err) {
     console.error('Google login error:', err && err.message ? err.message : err);
@@ -111,6 +120,20 @@ exports.getMe = async (req, res, next) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
     res.json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Logout -> clear cookie
+exports.logout = async (req, res, next) => {
+  try {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    });
+    res.json({ message: 'Logged out' });
   } catch (err) {
     next(err);
   }

@@ -53,7 +53,12 @@ export const loginWithGoogle = async (token, role) => {
 
 // 4. Logout
 export const logoutUser = () => {
-  localStorage.removeItem("user");
+  // Clear server cookie and local storage
+  try {
+    fetch(`${API_URL}/logout`, { method: 'POST', credentials: 'include' }).catch(() => {});
+  } finally {
+    localStorage.removeItem("user");
+  }
 };
 
 // 5. Verify current token by calling backend

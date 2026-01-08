@@ -11,6 +11,12 @@ import Dashboard from './pages/Dashboard';
 import ProtectedRoute from './components/layout/ProtectedRoute';
 import WhatsAppButton from './components/ui/WhatsAppButton';
 import NotificationsPage from './components/ui/NotificationsPage.jsx.jsx';
+import CommunityPage from './pages/CommunityPage';
+import CommunitySimple from './pages/CommunitySimple';
+import Forums from './pages/Forums';
+import Events from './pages/Events';
+import Explore from './pages/Explore';
+import MyLearning from './pages/MyLearning';
 
 function App() {
   return (
@@ -31,6 +37,12 @@ function App() {
           }
         />
         <Route path="/notifications" element={<NotificationsPage />} />
+        <Route path="/community" element={<CommunityPage />} />
+        <Route path="/community-simple" element={<CommunitySimple />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/my-learning" element={<MyLearning />} />
+        <Route path="/forums" element={<Forums />} />
+        <Route path="/events" element={<Events />} />
       </Routes>
       
       {/* Global Floating Elements */}
